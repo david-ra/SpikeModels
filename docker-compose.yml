@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  app:
+    container_name: spike_model
+    build: .
+    command: python main.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
