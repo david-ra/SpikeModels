@@ -10,8 +10,6 @@ from functions.Prediction import *
 
 app = Flask(__name__)
 
-users_seen = {}
-
 @app.route('/spike/models')
 def getAvailableModels():
     path = join(dirname(__file__), "pickles", "models")
@@ -40,6 +38,8 @@ def getPredictionFromCSV(modelname:str) -> json:
                 date=dt.utcnow())
 
 def main():
+    #from waitress import serve
+    #serve(app, host="0.0.0.0", port=5000)
     app.run(host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
