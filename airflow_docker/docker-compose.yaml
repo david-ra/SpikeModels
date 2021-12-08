@@ -61,7 +61,7 @@ x-airflow-common:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
-    - ../venv:/opt/airflow/venv
+    - ./venv:/opt/airflow/venv
     - ../data:/opt/airflow/data
     - ../functions:/opt/airflow/functions
     - ../pickles:/opt/airflow/pickles

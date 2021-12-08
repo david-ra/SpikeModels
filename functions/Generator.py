@@ -263,12 +263,10 @@ def main():
         )
 
         # save update file to pkls folder
-        pickle.dump(preprocessed_data, open(join(dirname(__file__), "..", "pickles", "preprocessed_data.sav"), 'wb'))
+        # pickle.dump(preprocessed_data, open(join(dirname(__file__), "..", "pickles", "preprocessed_data.sav"), 'wb'))
 
         # generate training model files
         model_1, model_2 = Training(preprocessed_data)
-        # pickle.dump(model_1, open(join(dirname(__file__), "..", "pickles", "models", "model_1.sav"), 'wb'))
-        # pickle.dump(model_2, open(join(dirname(__file__), "..", "pickles", "models", "model_2.sav"), 'wb'))
         pickle.dump(model_1, open(join(dirname(__file__), "..", "pickles", "models", "model_1"), 'wb'))
         pickle.dump(model_2, open(join(dirname(__file__), "..", "pickles", "models", "model_2"), 'wb'))
 
