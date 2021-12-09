@@ -266,9 +266,9 @@ def main():
         # pickle.dump(preprocessed_data, open(join(dirname(__file__), "..", "pickles", "preprocessed_data.sav"), 'wb'))
 
         # generate training model files
-        model_1, model_2 = Training(preprocessed_data)
-        pickle.dump(model_1, open(join(dirname(__file__), "..", "pickles", "models", "model_1"), 'wb'))
-        pickle.dump(model_2, open(join(dirname(__file__), "..", "pickles", "models", "model_2"), 'wb'))
+        # model_1, model_2 = Training(preprocessed_data)
+        # pickle.dump(model_1, open(join(dirname(__file__), "..", "pickles", "models", "model_1"), 'wb'))
+        # pickle.dump(model_2, open(join(dirname(__file__), "..", "pickles", "models", "model_2"), 'wb'))
 
         # MODEL VARIABLES
         X = preprocessed_data.drop(['Precio_leche'], axis = 1)
@@ -288,6 +288,7 @@ def main():
 
         cols_no_leche = [x for x in list(X.columns) if not ('leche' in x)]
         X_test  = X_test[cols_no_leche]
+        #X_test.to_csv(join(dirname(__file__), "..", "data", "x_test_noleche.csv"))
         y_predicted_2 = Predict(X_test, "model_2")
         rmse = mean_squared_error(y_test, y_predicted_2)
         r2 = r2_score(y_test, y_predicted_2)
