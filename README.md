@@ -39,20 +39,68 @@ los 3 primeros csv son los archivos csv de datos utilizados para preprocesamient
 utilizado como input de testeo, que corresponde al 20% de los datos que no se utilizaron para entrenar, con el fin de que puedas
 testear inmediatamente el output de la API enviando ese archivo mediante POST con INSOMNIA ( o Postman si lo prefieres ).
 
-## Para testear usando INSOMNIA
+## Para testear API usando INSOMNIA
 
-abrir insomnia y creamos un nuevo request:
+abrir insomnia y creamos un nuevo request, usando como name SpikeModels, seleccionaremos método POST y seleccionamos FILE 
+para poder pasar el archivo CSV de testing y realizar la prueba.
 
-<img src="create_request.png" alt="ejemplo crear request">
+<img src="./docs/imgs/example_request.jpg" alt="ejemplo crear request">
+
+El contenedor esta corriendo una aplicacion en FLASK en el puerto 5000, y el endpoint a utilizar es `http://localhost:5000/spike/model_1/csv`.
+Vamos a enviar el archivo de testing x_test.csv que esta en la carpeta data, ahora solo tenemos que seleccionar "Choose File" para buscar este archivo dentro 
+de nuestro repositorio:
+
+<img src="./docs/imgs/choose_file.jpg" alt="seleccion de archivo csv testing">
+
+Luego de essto solo queda presionar SEND, si todo sale bien, y nuestro contenedor esta ejecutandose, deberiamos recibir un response 200 OK:
 
 
+<img src="./docs/imgs/response.jpg" alt="seleccion de archivo csv testing">
 
+El json obtenido deberia tener un key llamado predictions con los valores de precio de leche que nuestro modelo predijo desde `x_test.csv`.
 
-### Para realizar pruebas con la API, puedes utilizar Insomnia/Postman. 
+## Para testear API usando CURL
 
+Si se esta probando en un ambiente unix, ya sea en ubunto o macos, puedes testear usando curl de la siguiente manera en la terminal de comandos:
 
-
-
+```
 curl -i -X POST  http://127.0.0.1:3000/spike/model_1/csv  -H "Content-Type: text/csv" --data-binary "@./data/x_test.csv"
+```
+
+Solo tener cuidado de que en el parametro --data-binary incluyamos la ruta absoluta a nuestro archivo de testing `x_test.csv`.
+
+
+# PIPELINE - AIRFLOW
+
+El repositorio incluye in archivo llamado `SpikePipeline.py` el cual es un dag para airflow que tambien puedes probar utilizando docker.
+Para esto, puedes entrar a la carpeta `airflow_docker` del repositorio y ejecutar `docker-compose up -d`. Lo cual deberia descargar y configurar 
+un ambiente de airflow para testear. Luego de que el contenedor de AIRFLOW este ejecutandose, entrar a `http://127.0.0.1:8080` haciendo login con 
+las credenciales "airflow" y password "airflow". 
+
+Dentro de AIRFLOW, buscar el DAG `SpikeModelGenerator` o bien entrar al dag en este [link](http://127.0.0.1:8080/graph?dag_id=SpikeModelGenerator), en el 
+podras ver que existen 2 tasks que te permitiran generar los modelos necesarios, si deseas reentrenar los modelos , solo dale play para que la API utilice el nuevo modelo generado:
+
+<img src="./docs/imgs/airflow.jpg" alt="seleccion de archivo csv testing">
+
+Si todo sale bien y el proceso termina, airflow deberia crear el archivo model_1 dentro de la carpeta `/pickes/models`. 
+
+PD: El archivo JupyterNotebook provisto para este desafio tenia 2 modelos generados. Si bien el primero da mejores resultados, nuestor pipeline genera 2
+archivos pickle dentro de pickles/models, los cuales son model_1 y model_2. Para testear el model_2, simplemente basta con cambiar la URL del método POST
+a `http://127.0.0.1:3000/spike/model_2/csv`. En este caso se debe pasar el arhcivo `x_test_noleche.csv`, ya que este modelo 2 no utiliza el precio de la leche anterior, solo el resto de las variables mencionadas en el jupyter notebook del desafio original, puedes encontrar estos archivos para mayor entendimiento 
+en la carpeta docs del repositorio.
+
+Muchas gracias por la oportunidad :D, aprendi mucho!
+
+Atte.
+
+David R.
+
+
+
+
+
+
+
+
 
 
